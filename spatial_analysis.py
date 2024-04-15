@@ -19,9 +19,10 @@ def process_data(file_path, method_prefix, method_types):
             filepath = os.path.join(file_path, filename)
             cell_line = filename.split("_")[0]
             full_df = pd.read_csv(filepath)
-            full_df = full_df.dropna()
+            full_df = full_df.dropna() #Removes NaN's fom PCC data
             
             for value in method_types:
+                # Filtering for values >0.4. Can change depending on the threshold
                 filtered_df = full_df[full_df[value] > 0.4]
 
                 if len(filtered_df) > 2:
@@ -31,11 +32,6 @@ def process_data(file_path, method_prefix, method_types):
                     pcc = stats.pearsonr(x,y)
                     pcc_val =  pcc.correlation
                     pcc_CI = list(pcc.confidence_interval(confidence_level=0.9))
-                    
-                    # spearman = stats.spearmanr(x, y)
-                    # spearman_val = spearman.correlation
-                    # spearman_pval = spearman.pvalue
-                    # data.append({"Cell line": cell_line, "Time bin": value, "Filtered Points": len(filtered_df),"Total Points": len(full_df),"Percentage > 0.4": percentage})
                     
                     data.append({"Cell line": cell_line, "Time bin": value, "PCC Value": pcc_val, "PCC CI lower": pcc_CI[0], "PCC CI upper": pcc_CI[1],
                                  "Points > 0": len(filtered_df),"Total Points": len(full_df), "Percentage > 0.": percentage})
@@ -56,6 +52,7 @@ def plot_dataframe(df,fig_width, fig_height,save_path):
     time_bins = df["Time bin"].unique()
     num_bins = len(time_bins)
     
+    # Generating plot for the PCC values with 95% CI
     fig, axes = plt.subplots(nrows=num_bins, ncols=1, figsize=(fig_width, fig_height))
     
     for i, time_bin in enumerate(time_bins):

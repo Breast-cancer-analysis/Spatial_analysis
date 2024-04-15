@@ -14,6 +14,7 @@ import pickle
 def load_events_data(events_file):
     return pd.read_csv(events_file)
 
+# PCC files are in a plk format so this helps to format it
 def load_pcc_data(cell_line, pcc_path, fov, bin_widths):
     pcc_data = {}
     for bin_width in bin_widths:
@@ -22,6 +23,7 @@ def load_pcc_data(cell_line, pcc_path, fov, bin_widths):
             pcc_data[f'PCC Value ({bin_width}s)'] = pcc_array
     return pd.DataFrame(pcc_data)
 
+# Create a csv with the pcc values and distances
 def combine_pcc_and_distance(cell_line, pcc_path, data_path, events_df, save_path):
     cell_line_folder = os.path.join(save_path, cell_line)
     os.makedirs(cell_line_folder, exist_ok=True)  # Create folder for each cell line
@@ -68,6 +70,7 @@ def combine_pcc_and_distance(cell_line, pcc_path, data_path, events_df, save_pat
             except Exception as e:
                 print(f"Error processing file {filename}: {e}")
 
+# Create a csv with the sttc values and distances
 def combine_sttc_and_distance(cell_line, sttc_path, data_path, events_df, save_path):
     cell_line_folder = os.path.join(save_path, cell_line)
     os.makedirs(cell_line_folder, exist_ok=True)  # Create folder for each cell line

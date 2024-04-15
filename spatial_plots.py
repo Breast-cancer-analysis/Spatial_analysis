@@ -13,7 +13,7 @@ import matplotlib.pyplot as plt
 
 # Datapath for 1 cell line
 DATAPATH = "/Users/tianpan/Library/CloudStorage/OneDrive-ImperialCollegeLondon/Yr3 Project/sorted_data/"
-CELL_LINE = "wm" # can change for the relevant cell line
+CELL_LINE = "468" # can change for the relevant cell line
 EVENTSFILE = "/Users/tianpan/Library/CloudStorage/OneDrive-ImperialCollegeLondon/Yr3 Project/original_data/events_data/20220423_original_and_review_all_events_df.csv"
 
 # db for the x,y values
@@ -21,47 +21,50 @@ events_df = pd.read_csv(EVENTSFILE)
 
 # Reading mulitple files for each cell_line
 directory = DATAPATH + CELL_LINE
-for filename in os.listdir(directory):
-    if filename.endswith('.csv'):
-        filepath = os.path.join(directory, filename)
-        
-        # Time series db
-        timeseries_df = pd.read_csv(filepath)
-        plot_title = filename[:-4]
-        coords_list = []
-        
-        # Extract relevant data for a new coords df
-        for index, row in timeseries_df.iterrows():
-            cell_id = row['cell']
-            cell_id_short = cell_id.split('cell_')[-1]
+# for filename in os.listdir(directory):
+# filename = "cancer_cancer20220210_slip3_area1_20220210_slip3_area1_long_acq_blue_0.112_green_0.0673_L231_2_data.csv"
+filename = 'cancer_cancer20220308_slip3_area3_long_acq_cancer20220308_slip3_area3_long_acq_blue_0.112_green_0.0673_L468_1_data.csv'
+if filename.endswith('.csv'):
+    filepath = os.path.join(directory, filename)
+    
+    # Time series db
+    timeseries_df = pd.read_csv(filepath)
+    plot_title = filename[:-4]
+    coords_list = []
+    
+    # Extract relevant data for a new coords df
+    for index, row in timeseries_df.iterrows():
+        cell_id = row['cell']
+        cell_id_short = cell_id.split('cell_')[-1]
 
-            # Getting the x and y positions of the cell
-            cell_coordinates = events_df[events_df['cell_id'] == cell_id]
-            x_pos = cell_coordinates['cell_x'].iloc[0]/1.04  # Lots of entries with the same position
-            y_pos = cell_coordinates['cell_y'].iloc[0]/1.04
-                
-            new_row = {'cell_id': cell_id_short, 'x': x_pos, 'y': y_pos}
-            coords_list.append(new_row)
-        
-      
-        # Concatenate all dictionaries into a DataFrame
-        coords_df = pd.DataFrame(coords_list)
-        
-        # Creating the figures 
-        plt.figure(figsize=(16, 12))
-        plt.scatter(coords_df['x'], coords_df['y'], c='b', label='Cell positions', s=20)
-        
-        # Annotate each point with cell ID
-        for i, txt in enumerate(coords_df['cell_id']):
-            plt.annotate(txt, (coords_df['x'][i], coords_df['y'][i]), fontsize=15)
-        
-        plt.xlabel('x (um)')
-        plt.ylabel('y (um)')
-        plt.title(f'Spatial Distribution of Cells for {plot_title}')
-        
-        plt.savefig(f'spatialplot_{plot_title}.png')
-        plt.close()
-        # plt.show()
+        # Getting the x and y positions of the cell
+        cell_coordinates = events_df[events_df['cell_id'] == cell_id]
+        x_pos = cell_coordinates['cell_x'].iloc[0]/1.04  # Lots of entries with the same position
+        y_pos = cell_coordinates['cell_y'].iloc[0]/1.04
+            
+        new_row = {'cell_id': cell_id_short, 'x': x_pos, 'y': y_pos}
+        coords_list.append(new_row)
+    
+  
+    # Concatenate all dictionaries into a DataFrame
+    coords_df = pd.DataFrame(coords_list)
+    
+    # Creating the figures 
+    plt.figure(figsize=(8, 6))
+    plt.scatter(coords_df['x'], coords_df['y'], c='b', label='Cell positions', s=40)
+    
+    # Annotate each point with cell ID
+    for i, txt in enumerate(coords_df['cell_id']):
+        plt.annotate(txt, (coords_df['x'][i], coords_df['y'][i]), fontsize=15)
+    
+    plt.xlabel(r'x ($\mu$m)',fontsize = 16)
+    plt.ylabel(r'y ($\mu$m)', fontsize = 16)
+    plt.title(f'Spatial Distribution of Cells in a FOV for 468', fontsize = 18)
+    plt.tick_params(axis='both', labelsize=14) 
+    
+    plt.savefig(f'spatialplot_468.eps')
+    # plt.close()
+    plt.show()
 
         
 

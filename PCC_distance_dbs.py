@@ -11,23 +11,24 @@ import numpy as np
 import pandas as pd
 import pickle
 
-# Get the data - testing for 1 FOV
-FILEPATH = "/Users/tianpan/Library/CloudStorage/OneDrive-ImperialCollegeLondon/3rd Year/Project/PCC_Distances"
-DATAPATH = "/Users/tianpan/Library/CloudStorage/OneDrive-ImperialCollegeLondon/Yr3 Project/sorted_data/"
-CELL_LINE = ['231','468','453','Cal51','MCF10A','MCF10A_TGFB','SUM159','T47D']
+# Filepath to save the data
+SAVEPATH = "/Users/tianpan/Library/CloudStorage/OneDrive-ImperialCollegeLondon/3rd Year/Project/PCC_Distances"
 
+#Filepaths for the data
+DATAPATH = "/Users/tianpan/Library/CloudStorage/OneDrive-ImperialCollegeLondon/Yr3 Project/sorted_data/"
+CELL_LINE =  ['231','468','453','BT474','Cal51','MCF10A','MCF10A_TGFB','SUM159','T47D']
 PCC_PATH = "/Users/tianpan/Library/CloudStorage/OneDrive-ImperialCollegeLondon/Yr3 Project/PCC_Stuff_David/Results_2"
 EVENTSFILE = "/Users/tianpan/Library/CloudStorage/OneDrive-ImperialCollegeLondon/Yr3 Project/original_data/events_data/20220423_original_and_review_all_events_df.csv"
 
-# db for the x,y values
+# Dataframe for the events data to get the x,y coordinates
 events_df = pd.read_csv(EVENTSFILE)
 
 invalid_files = []
 
-
 for cell_line in CELL_LINE:
     print("Starting:",cell_line)
-    cell_line_folder = os.path.join(FILEPATH, cell_line)
+    
+    cell_line_folder = os.path.join(SAVEPATH, cell_line)
     os.makedirs(cell_line_folder, exist_ok=True)  # Create folder for each cell line
     
     # Reading multiple files for each cell_line
@@ -92,7 +93,7 @@ for cell_line in CELL_LINE:
                     distance_pcc_df = pd.concat([distances_df, pcc_df], axis=1)
                     
                     # Save the combined DataFrame to the cell line folder
-                    combined_filepath = os.path.join(cell_line_folder, fov + '_complete_db.csv')
+                    combined_filepath = os.path.join(cell_line_folder, fov + '_pcc_and_distance_db.csv')
                     distance_pcc_df.to_csv(combined_filepath, sep=',', index=False, encoding='utf-8')
             
             except Exception as e:

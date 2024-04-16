@@ -31,7 +31,7 @@ def process_data(file_path, method_prefix, method_types):
                     y = filtered_df[value]
                     pcc = stats.pearsonr(x,y)
                     pcc_val =  pcc.correlation
-                    pcc_CI = list(pcc.confidence_interval(confidence_level=0.9))
+                    pcc_CI = list(pcc.confidence_interval(confidence_level=0.95))
                     
                     data.append({"Cell line": cell_line, "Time bin": value, "PCC Value": pcc_val, "PCC CI lower": pcc_CI[0], "PCC CI upper": pcc_CI[1],
                                  "Points > 0": len(filtered_df),"Total Points": len(full_df), "Percentage > 0.": percentage})

@@ -8,5 +8,8 @@ The corrcoeffs_distance_df.py exports a csv containing the PCC or STTC values an
 
 The event_add_distances.py was used to create a csv for the ST-DBSCAN. 
 
+The script spatial_scatter_plots.py creates a scatter plot of the correlation coefficients in a cell line against distance. 
+
 spatial_analysis.py was used to calculated the percentages of correlations, the PCC and plot the PCC values with a 95% confidence interval. 
+
 

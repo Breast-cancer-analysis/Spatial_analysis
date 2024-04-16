@@ -6,63 +6,64 @@ Created on Mon Apr  8 20:46:51 2024
 @author: tianpan
 """
 
-# import pandas as pd
-# import os
-# import seaborn as sns
-# import matplotlib.pyplot as plt
+# Code for all cell lines
+import pandas as pd
+import os
+import seaborn as sns
+import matplotlib.pyplot as plt
 
-# DATAPATH = "/Users/tianpan/Library/CloudStorage/OneDrive-ImperialCollegeLondon/3rd Year/Project/all_data"
-# CELL_LINES = ['MDA-MB-231', 'MDA-MB-468','BT-474']
-# save_path = "/Users/tianpan/Library/CloudStorage/OneDrive-ImperialCollegeLondon/3rd Year/Project/plots"
-# # Create an empty list to store all dataframes
-# dfs = []
+DATAPATH = "/Users/tianpan/Library/CloudStorage/OneDrive-ImperialCollegeLondon/3rd Year/Project/all_data"
+CELL_LINES = ['MDA-MB-231', 'MDA-MB-468','BT-474']
+save_path = "/Users/tianpan/Library/CloudStorage/OneDrive-ImperialCollegeLondon/3rd Year/Project/plots"
+# Create an empty list to store all dataframes
+dfs = []
 
-# # Load data for each cell line
-# for filename in os.listdir(DATAPATH):
-#     if filename.endswith('.csv') and 'sttc' in filename:
-#         # Extract cell line name from filename
-#         cell_line = filename.split('_')[0]
+# Load data for each cell line
+for filename in os.listdir(DATAPATH):
+    if filename.endswith('.csv') and 'sttc' in filename:
+        # Extract cell line name from filename
+        cell_line = filename.split('_')[0]
         
         
-#         filepath = os.path.join(DATAPATH, filename)
-#         full_df = pd.read_csv(filepath)
-#         # Add the cell line name as a new column in the dataframe
-#         full_df['Cell line'] = cell_line
+        filepath = os.path.join(DATAPATH, filename)
+        full_df = pd.read_csv(filepath)
+        # Add the cell line name as a new column in the dataframe
+        full_df['Cell line'] = cell_line
             
-#         dfs.append(full_df)
+        dfs.append(full_df)
 
-# # Concatenate all dataframes into one dataframe
-# combined_df = pd.concat(dfs, ignore_index=True)
-
-
-# # Sort the combined dataframe by the order of CELL_LINES
-# combined_df = combined_df.sort_values('Cell line')
-
-# # Set up seaborn settings
-# sns.set_theme(style="ticks")
-
-# # Initialize a grid of plots with an Axes for each cell line
-# grid = sns.FacetGrid(combined_df, col="Cell line",col_wrap=3, height=4)
-
-# # Draw a line plot for each cell line
-# grid.map(plt.scatter, "distance(um)", "STTC_plusminus5", s= 5)
+# Concatenate all dataframes into one dataframe
+combined_df = pd.concat(dfs, ignore_index=True)
 
 
-# for ax in grid.axes.flat:
-#     ax.axhspan(0.8, 1, color='grey', alpha=0.2)
-#     ax.axhspan(0.4, 1, color='blue', alpha=0.1)
+# Sort the combined dataframe by the order of CELL_LINES
+combined_df = combined_df.sort_values('Cell line')
+
+# Set up seaborn settings
+sns.set_theme(style="ticks")
+
+# Initialize a grid of plots with an Axes for each cell line
+grid = sns.FacetGrid(combined_df, col="Cell line",col_wrap=3, height=4)
+
+# Draw a line plot for each cell line
+grid.map(plt.scatter, "distance(um)", "STTC_plusminus5", s= 5)
+
+
+for ax in grid.axes.flat:
+    ax.axhspan(0.8, 1, color='grey', alpha=0.2)
+    ax.axhspan(0.4, 1, color='blue', alpha=0.1)
     
 
-# # Set x and y axis labels
-# grid.set_axis_labels(r'Distance ($\mu$ m)', "Correlation Coefficient")
-# grid.set_titles("{col_name}", fontsize = 20)
+# Set x and y axis labels
+grid.set_axis_labels(r'Distance ($\mu$ m)', "Correlation Coefficient")
+grid.set_titles("{col_name}", fontsize = 20)
 
-# # Adjust the arrangement of the plots
-# grid.fig.tight_layout(w_pad=1)
+# Adjust the arrangement of the plots
+grid.fig.tight_layout(w_pad=1)
 
-# # plt.savefig(os.path.join(save_path, 'sttc_5s_shaded.png'))
+plt.savefig(os.path.join(save_path, 'sttc_5s_shaded.png'))
 
-# plt.show()
+plt.show()
 
 # ----- Plotting for specific cell lines ---------------------------------------------
 
@@ -73,8 +74,9 @@ import matplotlib.pyplot as plt
 DATAPATH = "/Users/tianpan/Library/CloudStorage/OneDrive-ImperialCollegeLondon/3rd Year/Project/all_data"
 CELL_LINES = ['MDA-MB-231', 'MDA-MB-468', 'BT-474']
 save_path = "/Users/tianpan/Library/CloudStorage/OneDrive-ImperialCollegeLondon/3rd Year/Project/plots"
-# time_bins = ['STTC_plusminus1', 'STTC_plusminus5']  # Specify time bins of interest
-time_bins = ['1','10']
+# time_bins = ['STTC_plusminus1', 'STTC_plusminus5']  # Select if using STTC
+time_bins = ['1','10'] # Select for PCC
+
 # Create an empty list to store all dataframes
 dfs = []
 
@@ -121,10 +123,10 @@ for i, cell_line in enumerate(CELL_LINES):
         if i == len(CELL_LINES) - 1:
             axs[i, j].set_xlabel("Distance ($\mu$m)",fontsize = 14)
             axs[i, j].tick_params(axis='x', labelsize=12)  # Set tick label font size
-# Set x-axis label
-        
-plt.tight_layout()  # Adjust layout
 
-plt.savefig('pcc_big.png')
+        
+plt.tight_layout()  
+
+plt.savefig('pcc.png')
 plt.show() 
 
